@@ -1,74 +1,99 @@
-# 🔍 Task 01 — AI Product Scoping (Vin Smart Future)
+# 01 – Problem Scan & Quick Assessment
+## Lab 02: AI Product Scoping – Vin Smart Future
+
+**Phạm vi:** Bài làm cá nhân minh họa, chọn bài toán điều phối sự cố pin tại Xanh SM để phân tích sâu.  
+**Lưu ý về dữ liệu:** Các con số thời gian, số lượng sự cố và mục tiêu bên dưới là **giả định phục vụ bài tập**, không phải dữ liệu nội bộ đã được xác minh của Vingroup. Cần đo baseline thực tế trước khi triển khai.
 
 ---
 
-## 📌 Phase 1 — SCAN: Danh sách 6 bài toán vận hành (4 Lenses)
+## 1. Phase 1 – SCAN: Danh sách cơ hội
 
-| # | Subsidiary | Lens | Mô tả ngắn bài toán |
-| :--- | :--- | :--- | :--- |
-| **1** | **Xanh SM** | **Pain từ người khác** | Điểm đón gợi ý trên app thường lệch (sai cổng/tòa nhà), khiến tài xế và khách mất thời gian tìm nhau, phải gọi điện xác nhận. |
-| **2** | **Vinhomes** | **AI-upgrade** | Khiếu nại của cư dân trên app Resident được phân loại và chuyển bộ phận thủ công, phản hồi rập khuôn, thời gian chờ dài (~12 giờ). |
-| **3** | **Vinmec** | **Tốn thời gian** | Bác sĩ mất 20–30 phút/bệnh nhân để tổng hợp và viết tóm tắt hồ sơ xuất viện thủ công. |
-| **4** | **VinFast** | **Lặp lại** | Nhân viên tốn nhiều thời gian đối chiếu hóa đơn sạc điện với dữ liệu trạm sạc đối tác hằng tuần bằng bảng tính. |
-| **5** | **Vinpearl / VinWonders** | **AI-upgrade** | Chatbot CSKH hỗ trợ đặt vé/đổi vé trả lời máy móc, nhiều ca phức tạp phải chuyển sang nhân viên tư vấn thủ công. |
-| **6** | **Xanh SM** | **Tốn thời gian** | Tóm tắt lý do khách hủy chuyến từ ghi chú tài xế và cuộc gọi ghi âm để tìm ra lỗi hệ thống định vị/điều vận. |
+| # | Công ty | Lens | Bài toán / bottleneck | Người chịu ảnh hưởng | Cơ hội cải thiện |
+|---|---|---|---|---|---|
+| 1 | Xanh SM | Time-consuming | Dispatcher phải tra cứu GPS, kiểm tra trạm sạc tương thích/còn hoạt động và tự soạn hướng dẫn khi tài xế báo pin yếu. | Dispatcher, tài xế, khách chờ chuyến | Tự động tổng hợp dữ liệu đáng tin cậy và tạo bản nháp hướng dẫn. |
+| 2 | VinFast | Repetitive | Nhân viên vận hành phải đối chiếu giao dịch sạc, hóa đơn và dữ liệu phiên sạc từ nhiều nguồn. | Nhân viên tài chính/vận hành | Rule-based matching, AI chỉ hỗ trợ giải thích các trường hợp lệch dữ liệu. |
+| 3 | Vinhomes | AI-upgrade | Phản ánh cư dân đến qua nhiều kênh, nội dung tự do nên cần đọc, phân loại và chuyển đúng bộ phận. | CSKH, ban quản lý, cư dân | Phân loại văn bản và đề xuất bộ phận tiếp nhận; nhân viên duyệt trước khi tạo ticket. |
+| 4 | Vinpearl / VinWonders | AI-upgrade | Nhân viên CSKH trả lời lặp lại câu hỏi về giờ hoạt động, tiện ích, quy định vé và dịch vụ. | CSKH, khách du lịch | Trợ lý hỏi đáp dựa trên kho thông tin đã xác thực (RAG), dẫn nguồn và chuyển nhân viên khi thiếu dữ liệu. |
+| 5 | Vinmec | Stakeholder Pain | Nhân viên hành chính y tế mất thời gian tổng hợp thông tin hành chính từ hồ sơ để chuẩn bị bản nháp tóm tắt. | Nhân viên y tế, bệnh nhân | Hỗ trợ tóm tắt có trích nguồn; bác sĩ chịu trách nhiệm xác minh, không tự chẩn đoán/ra quyết định điều trị. |
+| 6 | Xanh SM | Repetitive | Phân loại lý do hủy chuyến từ ghi chú tài xế và phản hồi khách hàng đang cần thao tác thủ công. | Nhóm phân tích vận hành | NLP gom nhóm nguyên nhân, dashboard theo xu hướng; kiểm tra mẫu thủ công. |
 
-> 🎯 **Top 3 bài toán được chọn để làm Quick Card:** Card #1 (Xanh SM), Card #2 (Vinhomes), Card #3 (Vinmec).
-
----
-
-## 🃏 Phase 2 — QUICK-ASSESS: 3 Quick Problem Cards
-
-### 📋 QUICK PROBLEM CARD #1 — Xanh SM: Gợi ý điểm đón khách chính xác
-
-| Hạng mục | Nội dung chi tiết |
-| :--- | :--- |
-| **Bài toán (1 câu)** | Điểm đón gợi ý trên app thường bị lệch (sai cổng/tòa nhà), khiến tài xế và khách mất thời gian tìm nhau. |
-| **Công ty thành viên** | **Xanh SM** |
-| **Ai đang đau (Actor)** | Tài xế (mất thời gian, giảm số cuốc) & Khách hàng (chờ lâu, dễ hủy chuyến). |
-| **Workflow thủ công** | 1. Khách đặt xe, ghim điểm đón <br> 2. Tài xế chạy tới theo định vị <br> 3. Lệch vị trí / sai cổng <br> 4. Gọi điện xác nhận <br> 5. Tìm nhau và đón khách. |
-| **Bước lỗi / tốn thời gian nhất** | Bước 3 & 4 (⏱ ~5 phút/chuyến bị lệch) |
-| **AI nhảy vào hỗ trợ ở bước nào?** | Bước 1: Gợi ý điểm đón chuẩn dựa trên lịch sử các điểm đón thành công tại khu vực. |
-| **Metric đo thành công (Có số)** | - Giảm tỷ lệ chuyến phải gọi điện xác nhận từ **~30% xuống ~10%**.<br>- Giảm thời gian chờ đón trung bình từ **5 phút xuống 2 phút**. |
-| **Quick Architecture** | **[x] Rule / Spatial ML (Gom cụm lịch sử GPS)** |
+### Cách áp dụng 4 Lenses
+- **Repetitive:** #2 và #6 có các bước đối chiếu/phân loại lặp lại.
+- **Time-consuming:** #1 yêu cầu tra cứu nhiều màn hình và tổng hợp thông tin.
+- **AI-upgrade:** #3 và #4 có dữ liệu văn bản/ngôn ngữ tự nhiên.
+- **Stakeholder Pain:** #5 có thể gây chậm luồng công việc; do liên quan y tế nên cần giới hạn AI rất chặt.
 
 ---
 
-### 📋 QUICK PROBLEM CARD #2 — Vinhomes: Phân loại & nháp phản hồi khiếu nại cư dân
+## 2. Phase 2 – QUICK-ASSESS: Ba Quick Problem Cards
 
-| Hạng mục | Nội dung chi tiết |
-| :--- | :--- |
-| **Bài toán (1 câu)** | Khiếu nại cư dân trên app Resident được phân loại thủ công, chuyển tiếp chậm (~12h) và phản hồi rập khuôn. |
-| **Công ty thành viên** | **Vinhomes** |
-| **Ai đang đau (Actor)** | Nhân viên CSKH / Ban quản lý (quá tải ticket) & Cư dân (chờ lâu, phản hồi không sát). |
-| **Workflow thủ công** | 1. Cư dân gửi khiếu nại trên app <br> 2. CSKH đọc và gán nhãn <br> 3. Chuyển bộ phận liên quan <br> 4. Soạn văn bản phản hồi <br> 5. Gửi và theo dõi. |
-| **Bước lỗi / tốn thời gian nhất** | Bước 2 & 3: Phân loại sai, chuyển nhầm bộ phận (⏱ ~30 phút/ticket trước khi có người xử lý). |
-| **AI nhảy vào hỗ trợ ở bước nào?** | - Bước 2: Tự động phân loại, tóm tắt ý chính.<br>- Bước 4: Nháp phản hồi chuẩn hóa.<br>|
-| **Metric đo thành công (Có số)** | - Giảm thời gian phản hồi đầu tiên từ **~12 giờ xuống dưới 2 giờ**.<br>- Tỷ lệ phân loại đúng nhóm ticket đạt **≥ 90%**. |
-| **Quick Architecture** | **[x] LLM (kèm Rule định tuyến)** |
+### Card 1 – Xanh SM: Trợ lý xử lý sự cố pin / tìm hỗ trợ sạc
+
+| Trường | Nội dung |
+|---|---|
+| Bài toán | Khi tài xế báo pin yếu, dispatcher phải xác minh vị trí, mức pin, loại xe và tình trạng trạm sạc rồi hướng dẫn phương án an toàn. |
+| Công ty | Xanh SM (GSM) |
+| Actor | Dispatcher và tài xế. |
+| Workflow hiện tại | (1) Nhận cuộc gọi/ticket → (2) tra cứu GPS và mức pin → (3) kiểm tra trạm sạc, cổng sạc, trạng thái → (4) chọn phương án → (5) soạn hướng dẫn và chuyển dispatcher duyệt/gửi. |
+| Bottleneck | Tra cứu nhiều nguồn và đối chiếu tương thích; giả định 10/15 phút/lượt nằm ở bước 3–4. |
+| AI hỗ trợ | Tổng hợp dữ liệu có cấu trúc, giải thích lựa chọn và soạn bản nháp tiếng Việt. Bộ quy tắc xác định trường hợp pin nguy cấp. |
+| Metric | Baseline giả định 15 phút/lượt; mục tiêu trung vị dưới 3 phút/lượt. Tỷ lệ đề xuất đạt đủ điều kiện dữ liệu mục tiêu ≥98% trên tập test đã gán nhãn. |
+| Architecture | Rule-based safety + LLM feature; không dùng agent tự trị. |
+
+### Card 2 – Vinhomes: Phân loại và định tuyến phản ánh cư dân
+
+| Trường | Nội dung |
+|---|---|
+| Bài toán | Phân loại phản ánh văn bản thành nhóm sự cố và đề xuất bộ phận xử lý. |
+| Công ty | Vinhomes |
+| Actor | Nhân viên CSKH và ban quản lý. |
+| Workflow hiện tại | (1) Nhận phản ánh → (2) đọc nội dung → (3) xác định danh mục/mức độ → (4) tìm bộ phận phụ trách → (5) tạo/chuyển ticket. |
+| Bottleneck | Nội dung viết tự do, thiếu thông tin và phân loại không đồng nhất. |
+| AI hỗ trợ | LLM phân loại, trích xuất địa điểm/mô tả và hỏi bổ sung khi thiếu; nhân viên xác nhận trước khi chuyển ticket. |
+| Metric | ≥90% ticket được đề xuất danh mục trong 10 giây; macro-F1 mục tiêu ≥0,90 trên tập đánh giá đại diện; 100% ticket khẩn cấp được con người kiểm tra. |
+| Architecture | LLM feature kết hợp danh mục/rule-based routing. |
+
+### Card 3 – Vinpearl: Trợ lý hỏi đáp dịch vụ du lịch
+
+| Trường | Nội dung |
+|---|---|
+| Bài toán | Trả lời nhanh các câu hỏi lặp lại về dịch vụ, giờ hoạt động, tiện ích và chính sách vé. |
+| Công ty | Vinpearl / VinWonders |
+| Actor | Khách hàng và nhân viên CSKH. |
+| Workflow hiện tại | (1) Khách gửi câu hỏi → (2) nhân viên xác định chủ đề → (3) tra cứu tài liệu → (4) soạn câu trả lời → (5) phản hồi/chuyển bộ phận. |
+| Bottleneck | Tra cứu thông tin phân tán và cập nhật chính sách. |
+| AI hỗ trợ | RAG trên tài liệu chính thức có phiên bản; trả lời kèm nguồn và ngày cập nhật. |
+| Metric | ≥80% câu hỏi FAQ được phản hồi trong 10 giây; ≥95% câu trả lời được đánh giá đúng theo bộ câu hỏi chuẩn; không trả lời khi thiếu nguồn. |
+| Architecture | LLM + RAG + escalation rule. |
 
 ---
 
-### 📋 QUICK PROBLEM CARD #3 — Vinmec: Tóm tắt hồ sơ xuất viện
+## 3. So sánh và lựa chọn
 
-| Hạng mục | Nội dung chi tiết |
-| :--- | :--- |
-| **Bài toán (1 câu)** | Bác sĩ tốn 20–30 phút/bệnh nhân để viết tóm tắt hồ sơ xuất viện thủ công. |
-| **Công ty thành viên** | **Vinmec** |
-| **Ai đang đau (Actor)** | Bác sĩ điều trị (quá tải thủ tục hành chính) & Bệnh nhân (chờ đợi làm thủ tục xuất viện). |
-| **Workflow thủ công** | 1. Tổng hợp diễn tiến bệnh, xét nghiệm, đơn thuốc <br> 2. Viết tóm tắt hồ sơ xuất viện <br> 3. Rà soát lại thông tin <br> 4. Ký và lưu hệ thống EMR. |
-| **Bước lỗi / tốn thời gian nhất** | Bước 1 & 2 (⏱ ~20 phút/lượt) |
-| **AI nhảy vào hỗ trợ ở bước nào?** | Bước 1 & 2: Tự động tạo bản nháp tóm tắt từ dữ liệu hồ sơ có sẵn trên EMR (Bác sĩ bắt buộc rà soát, duyệt và ký). |
-| **Metric đo thành công (Có số)** | - Giảm thời gian viết tóm tắt từ **~25 phút xuống ~8 phút**.<br>- **0 lỗi sai thuốc / liều lượng** trong bản nháp sau bước rà soát. |
-| **Quick Architecture** | **[x] LLM (Information Extraction / Summarization)** |
+| Tiêu chí | Xanh SM – Sự cố pin | Vinhomes – Ticket | Vinpearl – FAQ |
+|---|---|---|---|
+| Quy trình có thể mô tả rõ | Cao | Cao | Cao |
+| Dữ liệu cần thiết | GPS, pin, xe, trạm sạc | Văn bản ticket, danh mục | Tài liệu dịch vụ chính thức |
+| Khả năng prototype | Cao với dữ liệu giả lập | Cao | Cao |
+| Rủi ro nếu AI sai | Cao: có thể khiến xe đi không an toàn | Trung bình/cao tùy mức độ sự cố | Trung bình: sai chính sách dịch vụ |
+| Biện pháp kiểm soát | Rule cứng + dispatcher duyệt | Ưu tiên khẩn cấp + nhân viên duyệt | RAG, trích nguồn, chuyển người |
+| Quyết định | **Chọn để Deep-Dive** | Chưa chọn | Chưa chọn |
+
+### Lý do chọn Xanh SM
+1. Có workflow tương đối cụ thể, đầu vào và đầu ra có thể xác định.
+2. Có thể tách rõ tác vụ định lượng/điều kiện (Rule) khỏi tác vụ ngôn ngữ (LLM).
+3. Rủi ro giúp minh họa tốt Operational Boundary, Human-in-the-loop và Fallback.
+4. Có thể xây dựng prototype an toàn bằng dữ liệu giả lập mà không cần kết nối hệ thống vận hành thật.
+
+### Vì sao chưa chọn hai bài toán còn lại?
+- **Vinhomes:** Cần taxonomy thống nhất, dữ liệu ticket đã gán nhãn và quy tắc ưu tiên theo mức độ ảnh hưởng. Có thể là dự án tiếp theo.
+- **Vinpearl:** RAG phù hợp nhưng cần kho tài liệu chính thức có quản lý phiên bản và quy trình cập nhật chính sách; phạm vi FAQ có thể triển khai sau khi chuẩn hóa tri thức.
 
 ---
 
-## 💡 Lý do lựa chọn bài toán để đào sâu (Deep-Dive Decision)
-
-**Đề xuất lựa chọn Card #2 (Vinhomes — Khiếu nại cư dân) để làm các bước tiếp theo:**
-1. **Khối lượng dữ liệu lớn & Đơn giản hóa được:** Tần suất phản ánh từ cư dân Vinhomes rất cao, quy trình xử lý văn bản cực kỳ phù hợp với thế mạnh trích xuất/tóm tắt/soạn thảo của LLM.
-2. **Kiểm soát rủi ro an toàn:** Rủi ro được kiểm soát chặt chẽ thông qua cơ chế phân luồng theo luật (Rule-based routing) và bắt buộc có người duyệt (Human-in-the-loop) trước khi gửi.
-3. **So sánh với 2 bài toán còn lại:**
-   * **Card #1 (Xanh SM):** Bản chất thiên về Rule Engine kết hợp Spatial Analytics/Clustering hơn là bài toán ưu tiên dùng LLM.
-   * **Card #3 (Vinmec):** Liên quan trực tiếp đến an toàn y khoa, rủi ro ảo giác (hallucination) cao, đòi hỏi quy trình kiểm duyệt và bộ dữ liệu y tế chuyên sâu phức tạp hơn ở giai đoạn prototype này.
+## 4. Giả định và dữ liệu cần xác minh
+- Thời gian xử lý 15 phút/lượt và 10 phút tại các bước nghẽn là giả định ban đầu.
+- Cần thu thập timestamp theo từng bước từ ticket/call log để xác định median, P90 và thời gian chờ.
+- Cần xác minh quyền truy cập GPS, SOC, loại xe/cổng sạc và trạng thái trạm.
+- Trạng thái trạm phải có timestamp/độ mới; dữ liệu cũ không được xem là xác nhận trụ còn trống.
+- Không sử dụng dữ liệu cá nhân hoặc vị trí thật trong prototype; dùng dữ liệu giả lập/đã ẩn danh.
